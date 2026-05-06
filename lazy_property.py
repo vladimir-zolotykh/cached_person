@@ -67,10 +67,12 @@ class Circle:
 
     @LazyProperty2
     def area(self):
+        print("computing area")
         return math.pi * self._radius**2
 
     @LazyProperty2
     def circumference(self):
+        print("computing circumference")
         return 2 * math.pi * self._radius
 
 
