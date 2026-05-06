@@ -15,23 +15,34 @@ class Singleton(type):
 
 
 class CachedInstance(type):
-    pass
+    _instances = {}
+
+    def __call__(cls, *args, **kwargs):
+        key = tuple((cls, *args))
+        # if (obj := type(cls)._instances.get(cls)) is not None:
+        #     return obj
+        if (obj := type(cls)._instances.get(key)) is not None:
+            return obj
+        obj = super().__call__(*args, **kwargs)
+        # type(cls)._instances[cls] = obj
+        type(cls)._instances[key] = obj
+        return obj
 
 
 class Spam(metaclass=Singleton):
-    def __init__(self, a, b):
+    def __init__(self):
         print("Initializing Spam")
 
 
-class NoSpam(metaclass=Singleton):
+class NoSpam(metaclass=CachedInstance):
     def __init__(self, x, y):
         print("Initializing NoSpam")
 
 
 if __name__ == "__main__":
-    s1 = Spam(10, 20)
-    s2 = Spam(10, 20)
+    s1 = Spam()
+    s2 = Spam()
     assert s1 is s2
     n1 = NoSpam(20, 40)
-    n2 = NoSpam(20, 40)
-    assert n1 is n2
+    n2 = NoSpam(21, 42)
+    print(id(n1), id(n2))
