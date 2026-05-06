@@ -14,20 +14,24 @@ class Singleton(type):
         return obj
 
 
+class CachedInstance(type):
+    pass
+
+
 class Spam(metaclass=Singleton):
-    def __init__(self):
+    def __init__(self, a, b):
         print("Initializing Spam")
 
 
 class NoSpam(metaclass=Singleton):
-    def __init__(self):
+    def __init__(self, x, y):
         print("Initializing NoSpam")
 
 
 if __name__ == "__main__":
-    s1 = Spam()
-    s2 = Spam()
+    s1 = Spam(10, 20)
+    s2 = Spam(10, 20)
     assert s1 is s2
-    n1 = NoSpam()
-    n2 = NoSpam()
+    n1 = NoSpam(20, 40)
+    n2 = NoSpam(20, 40)
     assert n1 is n2
