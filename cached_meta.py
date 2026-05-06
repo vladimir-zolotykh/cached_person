@@ -7,11 +7,11 @@ class Singleton(type):
     _instance = None
 
     def __call__(cls, *args, **kwargs):
-        if Singleton._instance is not None:
-            return Singleton._instance
-        cls = super().__call__(*args, **kwargs)
-        Singleton._instance = cls
-        return cls
+        if type(cls)._instance is not None:
+            return type(cls)._instance
+        obj = super().__call__(*args, **kwargs)
+        type(cls)._instance = obj
+        return obj
 
 
 class Spam(metaclass=Singleton):
@@ -19,7 +19,15 @@ class Spam(metaclass=Singleton):
         print("Initializing Spam")
 
 
+class NoSpam(metaclass=Singleton):
+    def __init__(self):
+        print("Initializing NoSpam")
+
+
 if __name__ == "__main__":
     s1 = Spam()
     s2 = Spam()
     assert s1 is s2
+    n1 = NoSpam()
+    n2 = NoSpam()
+    assert n1 is n2
