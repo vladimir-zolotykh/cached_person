@@ -4,13 +4,13 @@
 
 
 class Singleton(type):
-    _instance = None
+    _instances = None
 
     def __call__(cls, *args, **kwargs):
-        if type(cls)._instance is not None:
-            return type(cls)._instance
+        if type(cls)._instances is not None:
+            return type(cls)._instances
         obj = super().__call__(*args, **kwargs)
-        type(cls)._instance = obj
+        type(cls)._instances = obj
         return obj
 
 
