@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # PYTHON_ARGCOMPLETE_OK
+import math
 import pytest
 
 
@@ -44,6 +45,39 @@ class Math:
     fib = LazyProperty(fib, 8)
 
 
+class LazyProperty2:
+    def __init__(self, func):
+        self._func = func
+        self._name = func.__name__
+
+    def __get__(self, instance, owner=None):
+        if instance is None:
+            return self
+        if self._name in instance.__dict__:
+            return instance.__dict__[self._name]
+        else:
+            val = self._func(instance)
+            instance.__dict__[self._name] = val
+            return val
+
+
+class Circle:
+    def __init__(self, radius):
+        self._radius = radius
+
+    @LazyProperty2
+    def area(self):
+        return math.pi * self._radius**2
+
+    @LazyProperty2
+    def circumference(self):
+        return 2 * math.pi * self._radius
+
+
 if __name__ == "__main__":
     m = Math()
     print(m.fib)
+    print("*** Circle")
+    c = Circle(3.5)
+    print(c.area)
+    print(c.circumference)
