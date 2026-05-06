@@ -7,8 +7,8 @@ class Singleton(type):
     _instances = {}
 
     def __call__(cls, *args, **kwargs):
-        if cls in type(cls)._instances:
-            return type(cls)._instances[cls]
+        if (obj := type(cls)._instances.get(cls)) is not None:
+            return obj
         obj = super().__call__(*args, **kwargs)
         type(cls)._instances[cls] = obj
         return obj
